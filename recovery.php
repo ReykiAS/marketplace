@@ -4,7 +4,7 @@ include PROJECT_ROOT . '/Controller/ProductController.php';
 $controller = new ProductController();
 
 // Call the getAllProducts method to retrieve data
-$products = $controller->getAllProducts();
+$products = $controller->recoveryData();
 ?>
 
 <!DOCTYPE html>
@@ -65,11 +65,9 @@ $products = $controller->getAllProducts();
 </head>
 <body>
     <h2>Product List</h2>
-    <a href="<?php echo BASE_URL . "/create.php"?>">Add Product</a>
-    <a href="<?php echo BASE_URL . "/recovery.php"?>">Recovery Data</a>
     
     <br><br>
-    <form action="delete_selected.php" method="post">
+    <form action="recovery_data.php" method="post">
         <table>
             <tr>
                 <th>No</th>
@@ -102,7 +100,7 @@ $products = $controller->getAllProducts();
                 <?php endforeach ?>
                 <tr>
                     <td colspan="7">
-                        <button type="submit" class="delete-button">Delete Selected Products</button>
+                        <button type="submit" class="delete-button">Recovery Products</button>
                     </td>
                 </tr>
             <?php else : ?>

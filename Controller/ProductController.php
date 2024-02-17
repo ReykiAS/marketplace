@@ -1,31 +1,47 @@
 <?php
-require_once('database/database.php');
+include PROJECT_ROOT . '/model/ProductModel.php';
+
 
 class ProductController {
-    private $db;
 
-    public function __construct() {
-        $this->db = new Database();
+        private $model;
+    
+        public function __construct(){
+            $this->model = new ProductModel();
+        }
+    
+        // Action to get all products
+        public function getAllProducts(){
+            return $this->model->getAllProducts();
+        }
+        public function addProduct($data) {
+            return $this->model->addProduct($data);
+        }
+        public function viewProductDetails($id) {
+            return $this->model->viewProductDetails($id);
+        }
+    
+        public function softDeleteProduct($product_id) {
+            $success = $this->model->softDeleteProduct($product_id);
+            if ($success) {
+                echo "Product soft deleted successfully.";
+            } else {
+                echo "Failed to soft delete product.";
+            }
+        }
+        public function updateProduct($id, $data) {
+            $productModel = new ProductModel();
+            return $productModel->updateProduct($id, $data);
+        }
+        public function MultipleSoftDeleteProducts($ids) {
+            return $this->model->multiplesoftdelete($ids);
+        }
+        public function Recoverydata(){
+            return $this->model->Recoverydata();
+        }
+        public function recovery($ids){
+            return $this->model->recovery($ids);
+        }
     }
+    ?>
 
-    public function create($product_name, $price, $quantity, $description) {
-        $this->db->insertProduct($product_name, $price, $quantity, $description);
-    }
-
-    public function update($id, $product_name, $price, $quantity, $description) {
-        $this->db->updateProduct($id, $product_name, $price, $quantity, $description);
-    }
-
-    public function delete($id) {
-        $this->db->softDeleteProduct($id);
-    }
-
-    public function multipleDelete($ids) {
-        $this->db->multipleSoftDeleteProducts($ids);
-    }
-
-    public function restore($id) {
-        $this->db->restoreProduct($id);
-    }
-}
-?>

@@ -1,19 +1,41 @@
 <?php
+include PROJECT_ROOT . '/database/database.php';
 class ProductModel {
-    private $id;
-    private $product_name;
-    private $price;
-    private $quantity;
-    private $description;
+    
+   private $fillable = ['id,product_name','price','quantity','description'];
 
-    public function __construct($id, $product_name, $price, $quantity, $description) {
-        $this->id = $id;
-        $this->product_name = $product_name;
-        $this->price = $price;
-        $this->quantity = $quantity;
-        $this->description = $description;
+   private $db;
+
+    public function __construct(){
+        $this->db = new Database();
+        
     }
 
-    // Getters and setters if needed
+    // Get all products from database
+    public function getAllProducts(){ 
+        return $this->db->getAllProducts();
+    }
+    public function addProduct($data) {
+            return $this->db->insertProduct($data['product_name'], $data['price'], $data['quantity'], $data['description']);
+    }
+    
+    public function viewProductDetails($id) {
+        return $this->db->getProductDetails($id);
+    }
+    public function softDeleteProduct($product_id) {
+        return $this->db->softDeleteProduct($product_id);
+    }
+    public function updateProduct($id, $data) {
+        return $this->db->updateProduct($id, $data);
+    }
+    public function multiplesoftdelete($ids) {
+        return $this->db->multiplesoftdelete('products', $ids);
+    }
+    public function Recoverydata(){ 
+        return $this->db->recoveryData();
+    }
+    public function recovery($ids) {
+        return $this->db->recovery('products', $ids);
+    }
 }
 ?>
