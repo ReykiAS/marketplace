@@ -4,6 +4,20 @@ include PROJECT_ROOT . '/Controller/ProductController.php';
 $controller = new ProductController();
 
 $products = $controller->recoveryData();
+$message = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])) {
+    $productController = new ProductController();
+    $ids = $_POST['selected_products'];
+    if ($productController->recovery($ids)) {
+        header("Location: index.php?recovery_data_success=1");
+        exit;
+    } else {
+        echo "Failed to recovery products.";
+    }
+} elseif ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['selected_products'])) {
+    $message = "No products selected for recovery."; 
+}
 ?>
 
 <!DOCTYPE html>
@@ -12,60 +26,16 @@ $products = $controller->recoveryData();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product List</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-        }
-        h2 {
-            margin-bottom: 20px;
-        }
-        a {
-            text-decoration: none;
-            color: #007bff;
-            margin-right: 10px;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            background-color: #fff;
-            border-radius: 5px;
-            overflow: hidden;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        th, td {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
-        th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-        .delete-button {
-            margin-top: 10px;
-            background-color: #dc3545;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .delete-button:hover {
-            background-color: #c82333;
-        }
-    </style>
+    <link rel="stylesheet" href="style/styles.css">
 </head>
 <body>
     <h2>Product List</h2>
-    <a href="index.php" class="back-link"> Back to Homepage</a>
-    <form action="recovery_data.php" method="post">
+    <?php if (!empty($message)) : ?> 
+        <p><?php echo $message; ?></p>
+    <?php endif; ?>
+    <a href="index.php" class=""> Back to Homepage</a>
+    <br><br>
+    <form action="" method="post">
         <table>
             <tr>
                 <th>No</th>

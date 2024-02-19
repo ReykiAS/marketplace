@@ -4,6 +4,20 @@ include PROJECT_ROOT . '/Controller/ProductController.php';
 $controller = new ProductController();
 
 $products = $controller->getAllProducts();
+$message = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])) {
+    $controller = new ProductController();
+    $ids = $_POST['selected_products'];
+    if ($controller->MultipleSoftDeleteProducts($ids)) {
+        header("Location: index.php?soft_delete_success=1");
+        exit;
+    } else {
+        echo "Failed to delete products.";
+    }
+} elseif ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['selected_products'])) {
+    $message = "No products selected for deletion."; 
+}
 ?>
 
 <!DOCTYPE html>
@@ -18,9 +32,12 @@ $products = $controller->getAllProducts();
     <h2>Product List</h2>
     <a href="<?php echo BASE_URL . "/create.php"?>">Add Product</a>
     <a href="<?php echo BASE_URL . "/recovery.php"?>">Recovery Data</a>
+    <?php if (!empty($message)) : ?> 
+        <p><?php echo $message; ?></p>
+    <?php endif; ?>
     
     <br><br>
-    <form action="delete_selected.php" method="post">
+    <form action="" method="post">
         <table>
             <tr>
                 <th>No</th>
