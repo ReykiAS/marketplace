@@ -25,28 +25,14 @@ class Database {
         }
     }
     
-    
-    // Function to bind parameters
-    private function bindParams($stmt, $params) {
-        foreach ($params as $key => &$value) {
-            $stmt->bindParam($key, $value);
-        }
-    }
 
-    public function insertProduct($product_name, $price, $quantity, $description) {
-        try {  
-            $stmt = $this->conn->prepare("INSERT INTO products (product_name, price, quantity, description) VALUES (:product_name, :price, :quantity, :description)");
-
-            $params = array(
-                ':product_name' => $product_name,
-                ':price' => $price,
-                ':quantity' => $quantity,
-                ':description' => $description
-            );
-
-            $this->bindParams($stmt, $params);
-
-            $stmt->execute();
+    public function insertData($table, $data) {
+        try {
+            $columns = implode(', ', array_keys($data));
+            $values = ':' . implode(', :', array_keys($data));
+            $sql = "INSERT INTO $table ($columns) VALUES ($values)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute($data);
             return true;
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
@@ -132,3 +118,4 @@ class Database {
 
 
 ?>
+<!-- // membuat query menjadi generel di class database -->

@@ -15,8 +15,11 @@ class ProductModel {
     public function getAllProducts(){ 
         return $this->db->getAllProducts();
     }
-    public function addProduct($data) {
-            return $this->db->insertProduct($data['product_name'], $data['price'], $data['quantity'], $data['description']);
+    public function addProduct($table, $data) {
+        if (!is_array($data) || empty($data)) {
+            return false;
+        }
+        return $this->db->insertData($table, $data);
     }
     
     public function viewProductDetails($id) {

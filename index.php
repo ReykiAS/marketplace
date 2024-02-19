@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])) 
                         <td><?php echo $product["price"] ?></td>
                         <td><?php echo $product["quantity"] ?></td>
                         <td><?php echo $product["description"] ?></td>
-                        <td><?php echo $product["total_price"] ?></td> <!-- Display Total Price -->
+                        <td><?php echo $product["total_price"] ?></td> 
                         <td>
                             <a href="detail.php?id=<?php echo $product["id"] ?>">View</a> |
                             <a href="update.php?id=<?php echo $product["id"] ?>">Update</a> |

@@ -9,13 +9,12 @@ class ProductController {
         public function __construct(){
             $this->model = new ProductModel();
         }
-    
         // Action to get all products
         public function getAllProducts(){
             return $this->model->getAllProducts();
         }
-        public function addProduct($data) {
-            return $this->model->addProduct($data);
+        public function addProduct($table, $data) {
+            return $this->model->addProduct($table, $data);
         }
         public function viewProductDetails($id) {
             return $this->model->viewProductDetails($id);

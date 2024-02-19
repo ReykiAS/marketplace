@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'quantity' => $_POST['quantity'],
         'description' => $_POST['description']
     );
-    if ($productController->addProduct($data)) {
+    if ($productController->addProduct('products', $data))  {
         echo "Product added successfully.";
         // Redirect to index.php
         header("Location: index.php");
@@ -20,7 +20,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -69,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <h1>Add Product</h1>
-    <form method="post" action="">
+    <form method="post" action="create.php">
         <label for="product_name">Product Name:</label>
         <input type="text" id="product_name" name="product_name">
         
@@ -82,7 +81,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <label for="description">Description:</label>
         <textarea id="description" name="description"></textarea>
         
-        <input type="submit" value="Submit">
+        <input type="submit" value="Submit" name="submit">
     </form>
+
+    
 </body>
 </html>
