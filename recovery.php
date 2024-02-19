@@ -3,7 +3,6 @@ include 'Config/init.php';
 include PROJECT_ROOT . '/Controller/ProductController.php';
 $controller = new ProductController();
 
-// Call the getAllProducts method to retrieve data
 $products = $controller->recoveryData();
 ?>
 
@@ -65,9 +64,7 @@ $products = $controller->recoveryData();
 </head>
 <body>
     <h2>Product List</h2>
-    
-    <br><br>
-    <a href="index.php" class="back-link">&lt; Back to Homepage</a>
+    <a href="index.php" class="back-link"> Back to Homepage</a>
     <form action="recovery_data.php" method="post">
         <table>
             <tr>

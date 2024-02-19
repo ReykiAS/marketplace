@@ -3,6 +3,7 @@ include 'Config/init.php';
 include PROJECT_ROOT . '/Controller/ProductController.php';
 
 $productController = new ProductController();
+$message = ""; // Variabel message dideklarasikan di awal dengan string kosong
 
 // Check if product ID is provided in the URL
 if(isset($_GET['id'])) {
@@ -13,10 +14,7 @@ if(isset($_GET['id'])) {
 
     // Check if product details are retrieved successfully
     if($productDetails) {
-
-        // Check if form is submitted for update
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            // Prepare data for update
             $data = array(
                 'product_name' => $_POST['product_name'],
                 'price' => $_POST['price'],
@@ -24,15 +22,17 @@ if(isset($_GET['id'])) {
                 'description' => $_POST['description']
             );
             
-            // Call updateProduct method to update the product
             if ($productController->updateProduct($product_id, $data)) {
-                // Redirect to index.php with a success message
                 header("Location: index.php?update_success=1");
                 exit;
             } else {
                 echo "Failed to update product.";
             }
         }
+    } else {
+        $message = "Product not found."; 
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -103,6 +103,8 @@ if(isset($_GET['id'])) {
                 Product updated successfully.
             </div>
         <?php endif; ?>
+        <?php if(!empty($message)) echo $message; ?> 
+        <?php if($productDetails) : ?>
         <form action="" method="post">
             <input type="hidden" name="id" value="<?php echo $productDetails['id']; ?>">
             <label for="product_name">Product Name:</label>
@@ -119,14 +121,7 @@ if(isset($_GET['id'])) {
             
             <input type="submit" value="Update">
         </form>
+        <?php endif; ?>
     </div>
 </body>
 </html>
-<?php
-    } else {
-        echo "Product not found.";
-    }
-} else {
-    echo "No product ID provided.";
-}
-?>

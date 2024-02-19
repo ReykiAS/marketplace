@@ -1,3 +1,16 @@
+<?php
+include 'Config/init.php';
+include PROJECT_ROOT . '/Controller/ProductController.php';
+
+$id = $_GET['id'] ?? null;
+
+$productController = new ProductController();
+
+if($id !== null) {
+    $productDetails = $productController->viewProductDetails($id);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,47 +36,30 @@
         p {
             margin: 5px 0;
         }
-        .back-link {
-            display: block;
-            margin-top: 20px;
-            text-decoration: none;
-            color: #007bff;
-        }
         .back-link:hover {
             text-decoration: underline;
+        }
+        .back-link {
+            display: block;
+            text-decoration: none;
+            color: #fff;
+            background-color: #007bff;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-align: center;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <?php
-        include 'Config/init.php';
-        include PROJECT_ROOT . '/Controller/ProductController.php';
-        $id = $_GET['id'];
-
-        $productController = new ProductController();
-
-        if(isset($_GET['id'])) {
-            $id = $_GET['id'];
-
-            $productDetails = $productController->viewProductDetails($id);
-
-
-            if($productDetails) {
-                echo "<h2>Product Details</h2>";
-                echo "<p>ID: " . $productDetails['id'] . "</p>";
-                echo "<p>Product Name: " . $productDetails['product_name'] . "</p>";
-                echo "<p>Price: $" . $productDetails['price'] . "</p>";
-                echo "<p>Quantity: " . $productDetails['quantity'] . "</p>";
-                echo "<p>Description: " . $productDetails['description'] . "</p>";
-            } else {
-                echo "Product not found.";
-            }
-        } else {
-            echo "No product ID provided.";
-        }
-        ?>
-        <a href="index.php" class="back-link">&lt; Back to Homepage</a>
+        <h2>Product Details</h2>
+        <p>ID: <?php echo $productDetails['id']; ?></p>
+        <p>Name: <?php echo $productDetails['product_name']; ?></p>
+        <p>Price: <?php echo $productDetails['price']; ?></p>
+        <p>Quantity: <?php echo $productDetails['quantity']; ?></p>
+        <p>Description : <?php echo $productDetails['description']; ?></p>
+        <a href="index.php" class="back-link"> Back to Homepage</a>
     </div>
 </body>
 </html>

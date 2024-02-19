@@ -1,6 +1,25 @@
 <?php
 include 'Config/init.php';
 include PROJECT_ROOT . '/Controller/ProductController.php';
+
+$productController = new ProductController();
+
+// Check if product ID is provided
+if(isset($_GET['id'])) {
+    $product_id = $_GET['id'];
+
+    // Check if delete button is pressed
+    if(isset($_POST['delete_product'])) {
+        $success = $productController->softDeleteProduct($product_id);
+        if ($success) {
+            echo "Product successfully marked as deleted.";
+            header("Location: index.php");
+            exit; 
+        } 
+    }
+
+    $productDetails = $productController->viewProductDetails($product_id);
+}
 ?>
 
 <!DOCTYPE html>
@@ -35,24 +54,7 @@ include PROJECT_ROOT . '/Controller/ProductController.php';
             padding: 5px 0;
         }
 
-        .delete-form {
-            margin-top: 20px;
-        }
-
-        .delete-form input[type="submit"] {
-            background-color: #ff0000;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .delete-form input[type="submit"]:hover {
-            background-color: #cc0000;
-        }
-
-        .index-button {
+         .back-link {
             display: block;
             text-decoration: none;
             color: #fff;
@@ -66,53 +68,29 @@ include PROJECT_ROOT . '/Controller/ProductController.php';
 </head>
 <body>
     <div class="container">
-        <?php
+        <h2>Product Details</h2>
+        <?php if(isset($productDetails)) : ?>
+            <p>ID: <?php echo $productDetails['id']; ?></p>
+            <p>Name: <?php echo $productDetails['product_name']; ?></p>
+            <p>Price: <?php echo $productDetails['price']; ?></p>
+            <p>Quantity: <?php echo $productDetails['quantity']; ?></p>
+            <p>Description: <?php echo $productDetails['description']; ?></p>
 
-        $productController = new ProductController();
+            <form action='' method='post' class='delete-form' onsubmit='return confirmDelete()'>
+                <input type='hidden' name='product_id' value='<?php echo $product_id; ?>'>
+                <input type='submit' name='delete_product' value='Delete'>
+            </form>
 
-        // Check if product ID is provided
-        if(isset($_GET['id'])) {
-            $product_id = $_GET['id'];
+            <script>
+                function confirmDelete() {
+                    return confirm('Are you sure you want to delete this product?');
+                }
+            </script>
 
-            // Check if delete button is pressed
-            if(isset($_POST['delete_product'])) {
-
-                $success = $productController->softDeleteProduct($product_id);
-                if ($success) {
-                    echo "Product successfully marked as deleted.";
-
-                    header("Location: index.php");
-                    exit; 
-                } 
-            }
-
-            $productDetails = $productController->viewProductDetails($product_id);
-            if($productDetails) {
-                echo "<h2>Product Details</h2>";
-                echo "<p>ID: " . $productDetails['id'] . "</p>";
-                echo "<p>Product Name: " . $productDetails['product_name'] . "</p>";
-                echo "<p>Price: $" . $productDetails['price'] . "</p>";
-                echo "<p>Quantity: " . $productDetails['quantity'] . "</p>";
-                echo "<p>Description: " . $productDetails['description'] . "</p>";
-
-                echo "<form action='' method='post' class='delete-form' onsubmit='return confirmDelete()'>";
-                echo "<input type='hidden' name='product_id' value='" . $product_id . "'>";
-                echo "<input type='submit' name='delete_product' value='Delete'>";
-                echo "</form>";
-                echo "<script>";
-                echo "function confirmDelete() {";
-                echo "    return confirm('Are you sure you want to delete this product?');";
-                echo "}";
-                echo "</script>";
-
-                echo "<a href='index.php' class='index-button'>Go to Products List</a>";
-            } else {
-                echo "Product not found.";
-            }
-        } else {
-            echo "No product ID provided.";
-        }
-        ?>
+            <a href='index.php' class='back-link'>Back to Homepage</a>
+        <?php else : ?>
+            <p>No product details found.</p>
+        <?php endif; ?>
     </div>
 </body>
 </html>
