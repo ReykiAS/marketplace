@@ -67,7 +67,7 @@ include PROJECT_ROOT . '/Controller/ProductController.php';
 <body>
     <div class="container">
         <?php
-        // Initialize the controller
+
         $productController = new ProductController();
 
         // Check if product ID is provided
@@ -76,20 +76,17 @@ include PROJECT_ROOT . '/Controller/ProductController.php';
 
             // Check if delete button is pressed
             if(isset($_POST['delete_product'])) {
-                // Soft delete product
+
                 $success = $productController->softDeleteProduct($product_id);
                 if ($success) {
                     echo "Product successfully marked as deleted.";
-                    // Redirect to index.php after successful deletion
+
                     header("Location: index.php");
-                    exit; // Stop further execution
+                    exit; 
                 } 
             }
 
-            // Get product details from controller
             $productDetails = $productController->viewProductDetails($product_id);
-
-            // Display product details
             if($productDetails) {
                 echo "<h2>Product Details</h2>";
                 echo "<p>ID: " . $productDetails['id'] . "</p>";
@@ -98,20 +95,16 @@ include PROJECT_ROOT . '/Controller/ProductController.php';
                 echo "<p>Quantity: " . $productDetails['quantity'] . "</p>";
                 echo "<p>Description: " . $productDetails['description'] . "</p>";
 
-                // Form for soft delete button with confirmation
                 echo "<form action='' method='post' class='delete-form' onsubmit='return confirmDelete()'>";
                 echo "<input type='hidden' name='product_id' value='" . $product_id . "'>";
                 echo "<input type='submit' name='delete_product' value='Delete'>";
                 echo "</form>";
-
-                // JavaScript function for confirmation
                 echo "<script>";
                 echo "function confirmDelete() {";
                 echo "    return confirm('Are you sure you want to delete this product?');";
                 echo "}";
                 echo "</script>";
 
-                // Button to go to index.php
                 echo "<a href='index.php' class='index-button'>Go to Products List</a>";
             } else {
                 echo "Product not found.";

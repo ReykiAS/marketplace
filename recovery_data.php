@@ -6,7 +6,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])) 
     $productController = new ProductController();
     $ids = $_POST['selected_products'];
     if ($productController->recovery($ids)) {
-        // Redirect to index.php with a success message
         header("Location: index.php?soft_delete_success=1");
         exit;
     } else {

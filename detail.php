@@ -43,14 +43,12 @@
 
         $productController = new ProductController();
 
-        // Check if product ID is provided
         if(isset($_GET['id'])) {
             $id = $_GET['id'];
 
-            // Get product details from controller
             $productDetails = $productController->viewProductDetails($id);
 
-            // Display product details
+
             if($productDetails) {
                 echo "<h2>Product Details</h2>";
                 echo "<p>ID: " . $productDetails['id'] . "</p>";

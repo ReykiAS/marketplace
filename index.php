@@ -3,7 +3,6 @@ include 'Config/init.php';
 include PROJECT_ROOT . '/Controller/ProductController.php';
 $controller = new ProductController();
 
-// Call the getAllProducts method to retrieve data
 $products = $controller->getAllProducts();
 ?>
 
@@ -77,6 +76,7 @@ $products = $controller->getAllProducts();
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Description</th>
+                <th>Total Price</th> 
                 <th>Action</th>
                 <th>Select</th>
             </tr>
@@ -89,6 +89,7 @@ $products = $controller->getAllProducts();
                         <td><?php echo $product["price"] ?></td>
                         <td><?php echo $product["quantity"] ?></td>
                         <td><?php echo $product["description"] ?></td>
+                        <td><?php echo $product["total_price"] ?></td> <!-- Display Total Price -->
                         <td>
                             <a href="detail.php?id=<?php echo $product["id"] ?>">View</a> |
                             <a href="update.php?id=<?php echo $product["id"] ?>">Update</a> |
@@ -101,13 +102,13 @@ $products = $controller->getAllProducts();
                     <?php $counter++ ?>
                 <?php endforeach ?>
                 <tr>
-                    <td colspan="7">
+                    <td colspan="8"> 
                         <button type="submit" class="delete-button">Delete Selected Products</button>
                     </td>
                 </tr>
             <?php else : ?>
                 <tr>
-                    <td colspan="7">0 result</td>
+                    <td colspan="8">0 result</td> 
                 </tr>
             <?php endif ?>
         </table>

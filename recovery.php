@@ -67,6 +67,7 @@ $products = $controller->recoveryData();
     <h2>Product List</h2>
     
     <br><br>
+    <a href="index.php" class="back-link">&lt; Back to Homepage</a>
     <form action="recovery_data.php" method="post">
         <table>
             <tr>
@@ -75,7 +76,6 @@ $products = $controller->recoveryData();
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Description</th>
-                <th>Action</th>
                 <th>Select</th>
             </tr>
             <?php if (count($products) > 0) : ?>
@@ -87,11 +87,6 @@ $products = $controller->recoveryData();
                         <td><?php echo $product["price"] ?></td>
                         <td><?php echo $product["quantity"] ?></td>
                         <td><?php echo $product["description"] ?></td>
-                        <td>
-                            <a href="detail.php?id=<?php echo $product["id"] ?>">View</a> |
-                            <a href="update.php?id=<?php echo $product["id"] ?>">Update</a> |
-                            <a href="delete.php?id=<?php echo $product["id"] ?>">Delete</a>
-                        </td>
                         <td>
                             <input type="checkbox" name="selected_products[]" value="<?php echo $product['id'] ?>">
                         </td>

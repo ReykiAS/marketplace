@@ -17,13 +17,14 @@ class Database {
 
     public function getAllProducts() {
         try {
-            $stmt = $this->conn->query("SELECT * FROM products WHERE deleted = 0");
+            $stmt = $this->conn->query("SELECT *, FORMAT((price * quantity), 0, 'id_ID') AS total_price FROM products WHERE deleted = 0");
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
             return false;
         }
     }
+    
     
     // Function to bind parameters
     private function bindParams($stmt, $params) {
@@ -56,12 +57,10 @@ class Database {
     public function getProductDetails($id) {
         try {
             $stmt = $this->conn->prepare("SELECT id, product_name, price, quantity, description FROM products WHERE id = :id");
-
-            $params = array(
-                ':id' => $id,
-            );
-
+    
+            $params = array(':id' => $id);
             $this->bindParams($stmt, $params);
+    
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch(PDOException $e) {
@@ -69,6 +68,7 @@ class Database {
             return false;
         }
     }
+    
     public function softDeleteProduct($product_id) {
         try {
             $stmt = $this->conn->prepare("UPDATE products SET deleted = 1 WHERE id = :product_id");
