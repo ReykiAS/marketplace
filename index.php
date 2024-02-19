@@ -12,55 +12,7 @@ $products = $controller->getAllProducts();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product List</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-        }
-        h2 {
-            margin-bottom: 20px;
-        }
-        a {
-            text-decoration: none;
-            color: #007bff;
-            margin-right: 10px;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            background-color: #fff;
-            border-radius: 5px;
-            overflow: hidden;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        th, td {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
-        th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-        .delete-button {
-            margin-top: 10px;
-            background-color: #dc3545;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .delete-button:hover {
-            background-color: #c82333;
-        }
-    </style>
+    <link rel="stylesheet" href="style/styles.css"> 
 </head>
 <body>
     <h2>Product List</h2>
