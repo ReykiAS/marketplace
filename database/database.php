@@ -14,6 +14,12 @@ class Database {
             echo "Connection failed: " . $e->getMessage();
         }
     }
+    private function bindParams($stmt, $params) {
+        foreach ($params as $key => &$value) {
+            $stmt->bindParam($key, $value);
+        }
+    }
+
 
     public function getAllProducts() {
         try {
@@ -24,7 +30,6 @@ class Database {
             return false;
         }
     }
-    
 
     public function insertData($table, $data) {
         try {

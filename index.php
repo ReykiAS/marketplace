@@ -3,7 +3,8 @@ include 'Config/init.php';
 include PROJECT_ROOT . '/Controller/ProductController.php';
 $controller = new ProductController();
 
-$products = $controller->getAllProducts();
+$products = $controller->getAllProducts('');
+
 $message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])) {

@@ -10,8 +10,6 @@ class ProductModel {
         $this->db = new Database();
         
     }
-
-    // Get all products from database
     public function getAllProducts(){ 
         return $this->db->getAllProducts();
     }
