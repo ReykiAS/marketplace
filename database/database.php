@@ -21,16 +21,19 @@ class Database {
     }
 
 
-    public function getAllProducts() {
+    public function getAllProducts($table, $deleted = 0) {
         try {
-            $stmt = $this->conn->query("SELECT *, FORMAT((price * quantity), 0, 'id_ID') AS total_price FROM products WHERE deleted = 0");
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $stmt = $this->conn->prepare("SELECT * FROM $table WHERE deleted = ?");
+            $stmt->execute([$deleted]);
+            $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            return $products;
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
             return false;
         }
     }
-
     public function insertData($table, $data) {
         try {
             $columns = implode(', ', array_keys($data));
@@ -44,10 +47,11 @@ class Database {
             return false;
         }
     }
+    
 
-    public function getProductDetails($id) {
+    public function getProductDetails($table, $id) {
         try {
-            $stmt = $this->conn->prepare("SELECT id, product_name, price, quantity, description FROM products WHERE id = :id");
+            $stmt = $this->conn->prepare("SELECT * FROM $table WHERE id = :id");
     
             $params = array(':id' => $id);
             $this->bindParams($stmt, $params);
@@ -59,26 +63,21 @@ class Database {
             return false;
         }
     }
-    
-    public function softDeleteProduct($product_id) {
-        try {
-            $stmt = $this->conn->prepare("UPDATE products SET deleted = 1 WHERE id = :product_id");
-            $params = array(
-                ':product_id' => $product_id,
-            );
 
-            $this->bindParams($stmt, $params);
-            $stmt->execute();
-            return true;
-        } catch(PDOException $e) {
-            echo "Error: " . $e->getMessage();
-            return false;
-        }
-    }
-    public function updateProduct($id, $data) {
+    
+    public function updateProduct($table, $id, $data) {
         try {
-            $stmt = $this->conn->prepare("UPDATE products SET product_name = ?, price = ?, quantity = ?, description = ? WHERE id = ?");
-            $stmt->execute([$data['product_name'], $data['price'], $data['quantity'], $data['description'], $id]);
+            $query = "UPDATE $table SET ";
+            $params = [];
+            foreach ($data as $key => $value) {
+                $query .= "$key = ?, ";
+                $params[] = $value;
+            }
+            $query = rtrim($query, ", ");
+            $query .= " WHERE id = ?";
+            $params[] = $id;
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute($params);
             return true;
         } catch(PDOException $e) {
             echo "Error: " . $e->getMessage();
@@ -96,26 +95,20 @@ class Database {
             return false;
         }
     }
-    public function recoveryData() {
-        try {
-            $stmt = $this->conn->query("SELECT * FROM products WHERE deleted = 1");
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
-            return false;
-        }
-    }
     public function recovery($table, $ids) {
         try {
             $placeholders = implode(',', array_fill(0, count($ids), '?'));
-            $stmt = $this->conn->prepare("UPDATE $table SET `deleted` = 0 WHERE id IN ($placeholders)");
+            $query = "UPDATE $table SET deleted = 0 WHERE id IN ($placeholders)";
+            $stmt = $this->conn->prepare($query);
             $stmt->execute($ids);
+    
             return true;
         } catch(PDOException $e) {
             echo "Error: " . $e->getMessage();
             return false;
         }
     }
+    
     
     
 }

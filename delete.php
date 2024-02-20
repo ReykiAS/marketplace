@@ -4,21 +4,24 @@ include PROJECT_ROOT . '/Controller/ProductController.php';
 
 $productController = new ProductController();
 
-// Check if product ID is provided
 if(isset($_GET['id'])) {
-    $product_id = $_GET['id'];
-
-    // Check if delete button is pressed
+    
+    $ids = $_GET['id'];
     if(isset($_POST['delete_product'])) {
-        $success = $productController->softDeleteProduct($product_id);
+        if(isset($_GET['id'])) {
+            $ids = explode(',', $_GET['id']);
+            $success = $productController-> MultipleSoftDeleteProducts($ids);
         if ($success) {
             echo "Product successfully marked as deleted.";
             header("Location: index.php");
             exit; 
         } 
+            // ...
+        }
+        
     }
 
-    $productDetails = $productController->viewProductDetails($product_id);
+    $productDetails = $productController->viewProductDetails($ids);
 }
 ?>
 

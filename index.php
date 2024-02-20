@@ -3,7 +3,7 @@ include 'Config/init.php';
 include PROJECT_ROOT . '/Controller/ProductController.php';
 $controller = new ProductController();
 
-$products = $controller->getAllProducts('');
+$products = $controller->getAllProducts();
 
 $message = "";
 
@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])) 
     <?php endif; ?>
     
     <br><br>
-    <form action="" method="post">
+    <form action="" method="post" id="deleteForm">
         <table>
             <tr>
                 <th>No</th>
@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])) 
                 <th>Action</th>
                 <th>Select</th>
             </tr>
-            <?php if (count($products) > 0) : ?>
+            <?php if (is_array($products) && count($products) > 0) : ?>
                 <?php $counter = 1 ?>
                 <?php foreach ($products as $product) : ?>
                     <tr>
@@ -59,12 +59,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])) 
                         <td><?php echo $product["price"] ?></td>
                         <td><?php echo $product["quantity"] ?></td>
                         <td><?php echo $product["description"] ?></td>
-                        <td><?php echo $product["total_price"] ?></td> 
+                        <td><?php echo number_format($product['price'] * $product['quantity'], 0, '.', ',') ?></td> 
                         <td>
-                            <a href="detail.php?id=<?php echo $product["id"] ?>">View</a> |
-                            <a href="update.php?id=<?php echo $product["id"] ?>">Update</a> |
-                            <a href="delete.php?id=<?php echo $product["id"] ?>">Delete</a>
+                            <a href="detail.php?id=<?php echo $product['id']; ?>">View</a> |
+                            <a href="update.php?id=<?php echo $product['id']; ?>">Update</a> |
+                            <a href="delete.php?id=<?php echo $product['id']; ?>" class="delete-link">Delete</a>
                         </td>
+
                         <td>
                             <input type="checkbox" name="selected_products[]" value="<?php echo $product['id'] ?>">
                         </td>
@@ -76,6 +77,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])) 
                         <button type="submit" class="delete-button">Delete Selected Products</button>
                     </td>
                 </tr>
+            <?php elseif ($products === false) : ?>
+                <tr>
+                    <td colspan="8">Error retrieving products.</td> 
+                </tr>
             <?php else : ?>
                 <tr>
                     <td colspan="8">0 result</td> 
@@ -83,5 +88,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])) 
             <?php endif ?>
         </table>
     </form>
+
 </body>
 </html>

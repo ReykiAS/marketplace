@@ -9,18 +9,18 @@ class ProductController {
         public function __construct(){
             $this->model = new ProductModel();
         }
-        public function getAllProducts(){
-            return $this->model->getAllProducts();
+        public function getAllProducts($deleted = 0){
+            return $this->model->getAllProducts($deleted);
         }
-        public function addProduct($table, $data) {
-            return $this->model->addProduct($table, $data);
+        public function addProduct($data) {
+            return $this->model->addProduct($data);
         }
         public function viewProductDetails($id) {
             return $this->model->viewProductDetails($id);
         }
     
-        public function softDeleteProduct($product_id) {
-            $success = $this->model->softDeleteProduct($product_id);
+        public function softDeleteProduct($ids) {
+            $success = $this->model->softDeleteProduct([$ids]);
             if ($success) {
                 echo "Product soft deleted successfully.";
             } else {
@@ -34,9 +34,7 @@ class ProductController {
         public function MultipleSoftDeleteProducts($ids) {
             return $this->model->multiplesoftdelete($ids);
         }
-        public function Recoverydata(){
-            return $this->model->Recoverydata();
-        }
+
         public function recovery($ids){
             return $this->model->recovery($ids);
         }

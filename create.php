@@ -10,9 +10,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'quantity' => $_POST['quantity'],
         'description' => $_POST['description']
     );
-    if ($productController->addProduct('products', $data))  {
+    if ($productController->addProduct( $data))  {
         echo "Product added successfully.";
-        // Redirect to index.php
         header("Location: index.php");
         exit();
     } else {
@@ -67,23 +66,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </style>
 </head>
 <body>
-    <h1>Add Product</h1>
-    <form method="post" action="create.php">
+<h1>Add Product</h1>
+    <form method="post" action="create.php" onsubmit="return validateForm()">
         <label for="product_name">Product Name:</label>
-        <input type="text" id="product_name" name="product_name">
+        <input type="text" id="product_name" name="product_name" required>
         
         <label for="price">Price:</label>
-        <input type="text" id="price" name="price">
+        <input type="text" id="price" name="price" required min="0">
         
         <label for="quantity">Quantity:</label>
-        <input type="text" id="quantity" name="quantity">
+        <input type="text" id="quantity" name="quantity" required>
         
         <label for="description">Description:</label>
-        <textarea id="description" name="description"></textarea>
+        <textarea id="description" name="description" required></textarea>
         
         <input type="submit" value="Submit" name="submit">
     </form>
 
-    
+    <script>
+        function validateForm() {
+            var productName = document.getElementById("product_name").value;
+            var price = document.getElementById("price").value;
+            var quantity = document.getElementById("quantity").value;
+            var description = document.getElementById("description").value;
+            
+            if (productName === "" || price === "" || quantity === "" || description === "") {
+                alert("Please fill in all fields.");
+                return false;
+            }
+            if (description.length < 10) {
+                alert("Description must be at least 10 characters long.");
+                return false;
+            }
+            if (price <= 0) {
+                alert("Price must be greater than 0.");
+                return false;
+            }
+            return true;
+        }
+    </script>
 </body>
 </html>

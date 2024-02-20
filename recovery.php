@@ -2,8 +2,8 @@
 include 'Config/init.php';
 include PROJECT_ROOT . '/Controller/ProductController.php';
 $controller = new ProductController();
+$products = $controller->getAllProducts( $deleted=1);
 
-$products = $controller->recoveryData();
 $message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])) {

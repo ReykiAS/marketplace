@@ -2,7 +2,8 @@
 include PROJECT_ROOT . '/database/database.php';
 class ProductModel {
     
-   private $fillable = ['id,product_name','price','quantity','description'];
+   private $fillable = ['id,product_name','price','quantity','description','deleted'];
+   private $TbName = 'products';
 
    private $db;
 
@@ -10,33 +11,27 @@ class ProductModel {
         $this->db = new Database();
         
     }
-    public function getAllProducts(){ 
-        return $this->db->getAllProducts();
+    public function getAllProducts($deleted = 0){ 
+        return $this->db->getAllProducts($this->TbName, $deleted);
     }
-    public function addProduct($table, $data) {
+    public function addProduct($data) {
         if (!is_array($data) || empty($data)) {
             return false;
         }
-        return $this->db->insertData($table, $data);
+        return $this->db->insertData($this->TbName, $data); 
     }
     
     public function viewProductDetails($id) {
-        return $this->db->getProductDetails($id);
-    }
-    public function softDeleteProduct($product_id) {
-        return $this->db->softDeleteProduct($product_id);
+        return $this->db->getProductDetails($this->TbName,$id);
     }
     public function updateProduct($id, $data) {
-        return $this->db->updateProduct($id, $data);
+        return $this->db->updateProduct($this->TbName,$id, $data);
     }
     public function multiplesoftdelete($ids) {
-        return $this->db->multiplesoftdelete('products', $ids);
-    }
-    public function Recoverydata(){ 
-        return $this->db->recoveryData();
+        return $this->db->multiplesoftdelete($this->TbName, $ids);
     }
     public function recovery($ids) {
-        return $this->db->recovery('products', $ids);
+        return $this->db->recovery($this->TbName, $ids);
     }
 }
 ?>
