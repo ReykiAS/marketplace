@@ -90,18 +90,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             var quantity = document.getElementById("quantity").value;
             var description = document.getElementById("description").value;
             
-            if (productName === "" || price === "" || quantity === "" || description === "") {
-                alert("Please fill in all fields.");
+            if (isNaN(price)) {
+                alert("Price must be a numeric value.");
+                return false;
+            }
+            if (parseInt(quantity) <= 1) {
+                alert("Quantity must be greater than 1.");
                 return false;
             }
             if (description.length < 10) {
                 alert("Description must be at least 10 characters long.");
                 return false;
             }
-            if (price <= 0) {
-                alert("Price must be greater than 0.");
-                return false;
-            }
+            
+            // Form validation passed
             return true;
         }
     </script>
