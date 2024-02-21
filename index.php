@@ -91,12 +91,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])) 
     </form>
     <script>
         function confirmDelete() {
-            if (confirm("Are you sure you want to delete the selected products?")) {
                 if (confirm("Do you want to delete the selected product(s)?")) {
                     document.getElementById("deleteForm").submit();
                 }
             }
-        }
     </script>
 
 </body>
