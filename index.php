@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])) 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product List</title>
-    <link rel="stylesheet" href="style/styles.css"> 
+    <link rel="stylesheet" href="style/styles.css">
 </head>
 <body>
     <h2>Product List</h2>
@@ -45,21 +45,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])) 
                 <th>Product Name</th>
                 <th>Price</th>
                 <th>Quantity</th>
-                <th>Description</th>
                 <th>Total Price</th> 
+                <th>Description</th>
                 <th>Action</th>
                 <th>Select</th>
             </tr>
             <?php if (is_array($products) && count($products) > 0) : ?>
                 <?php $counter = 1 ?>
                 <?php foreach ($products as $product) : ?>
-                    <tr>
+                    <tr class="active-row">
                         <td><?php echo $counter ?></td>
                         <td><?php echo $product["product_name"] ?></td>
                         <td><?php echo $product["price"] ?></td>
                         <td><?php echo $product["quantity"] ?></td>
-                        <td><?php echo $product["description"] ?></td>
                         <td><?php echo number_format($product['price'] * $product['quantity'], 0, '.', ',') ?></td> 
+                        <td><?php echo $product["description"] ?></td>
+                        
                         <td>
                             <a href="detail.php?id=<?php echo $product['id']; ?>">View</a> |
                             <a href="update.php?id=<?php echo $product['id']; ?>">Update</a> |
@@ -74,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])) 
                 <?php endforeach ?>
                 <tr>
                     <td colspan="8"> 
-                        <button type="submit" class="delete-button">Delete Selected Products</button>
+                    <button type="button" class="delete-button" onclick="confirmDelete()">Delete Selected Products</button>
                     </td>
                 </tr>
             <?php elseif ($products === false) : ?>
@@ -88,6 +89,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_products'])) 
             <?php endif ?>
         </table>
     </form>
+    <script>
+        function confirmDelete() {
+            if (confirm("Are you sure you want to delete the selected products?")) {
+                if (confirm("Do you want to delete the selected product(s)?")) {
+                    document.getElementById("deleteForm").submit();
+                }
+            }
+        }
+    </script>
 
 </body>
 </html>

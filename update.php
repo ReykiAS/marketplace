@@ -45,6 +45,7 @@ if(isset($_GET['id'])) {
 <body>
     <div class="container">
         <h2>Update Product</h2>
+        
         <?php if(isset($_GET['update_success']) && $_GET['update_success'] == 1) : ?>
             <div class="notification">
                 Product updated successfully.
@@ -67,6 +68,7 @@ if(isset($_GET['id'])) {
             <textarea id="description" name="description"><?php echo $productDetails['description']; ?></textarea>
             
             <input type="submit" value="Update">
+            <a href="index.php" class="back-link"> Back to Homepage</a>
         </form>
         <?php endif; ?>
     </div>

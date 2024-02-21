@@ -2,20 +2,34 @@
 include 'Config/init.php';
 include PROJECT_ROOT . '/Controller/ProductController.php';
 
+$messages = []; 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $productController = new ProductController();
-    $data = array(
-        'product_name' => $_POST['product_name'],
-        'price' => $_POST['price'],
-        'quantity' => $_POST['quantity'],
-        'description' => $_POST['description']
-    );
-    if ($productController->addProduct( $data))  {
-        echo "Product added successfully.";
-        header("Location: index.php");
-        exit();
-    } else {
-        echo "Failed to add product.";
+    if (empty($_POST['product_name']) || empty($_POST['price']) || empty($_POST['quantity'])) {
+        $messages[] = "You must fill all the fields."; 
+    } 
+    if (!filter_var($_POST['price'], FILTER_VALIDATE_INT)) {
+        $messages[] = "Price must be an integer value.";
+    } 
+    if (!filter_var($_POST['quantity'], FILTER_VALIDATE_INT)) {
+        $messages[] = "Price must be an quantity value.";
+    } 
+    if (empty($messages)) {
+        $productController = new ProductController();
+        $data = array(
+            'product_name' => $_POST['product_name'],
+            'price' => $_POST['price'],
+            'quantity' => $_POST['quantity'],
+            'description' => $_POST['description']
+        );
+        
+        if ($productController->addProduct($data)) {
+            echo "Product added successfully.";
+            header("Location: index.php");
+            exit();
+        } else {
+            $messages[] = "Failed to add product.";
+        }
     }
 }
 ?>
@@ -63,49 +77,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         input[type="submit"]:hover {
             background-color: #0056b3;
         }
+        .messages {
+            color: red;
+            font-size: 13px;
+        }
+        
     </style>
 </head>
 <body>
 <h1>Add Product</h1>
-    <form method="post" action="create.php" onsubmit="return validateForm()">
-        <label for="product_name">Product Name:</label>
-        <input type="text" id="product_name" name="product_name" required>
-        
-        <label for="price">Price:</label>
-        <input type="text" id="price" name="price" required min="0">
-        
-        <label for="quantity">Quantity:</label>
-        <input type="text" id="quantity" name="quantity" required>
-        
-        <label for="description">Description:</label>
-        <textarea id="description" name="description" required></textarea>
-        
-        <input type="submit" value="Submit" name="submit">
-    </form>
-
-    <script>
-        function validateForm() {
-            var productName = document.getElementById("product_name").value;
-            var price = document.getElementById("price").value;
-            var quantity = document.getElementById("quantity").value;
-            var description = document.getElementById("description").value;
-            
-            if (isNaN(price)) {
-                alert("Price must be a numeric value.");
-                return false;
-            }
-            if (parseInt(quantity) <= 1) {
-                alert("Quantity must be greater than 1.");
-                return false;
-            }
-            if (description.length < 10) {
-                alert("Description must be at least 10 characters long.");
-                return false;
-            }
-            
-            // Form validation passed
-            return true;
-        }
-    </script>
+<a href="index.php" class="back-link"> Back to Homepage</a>
+<form method="post" action="create.php">
+    <label for="product_name">Product Name:
+        <input type="text" id="product_name" name="product_name" value="<?php echo isset($_POST['product_name']) ? htmlspecialchars($_POST['product_name']) : ''; ?>">
+        <?php if (!empty($messages) && in_array("You must fill all the fields.", $messages)) { ?>
+            <span class="messages">You must fill the fields.</span>
+        <?php } ?>
+    </label>
+    
+    <label for="price">Price:
+        <input type="text" id="price" name="price" value="<?php echo isset($_POST['price']) ? htmlspecialchars($_POST['price']) : ''; ?>">
+        <?php if (!empty($messages) && in_array("Price must be an integer value.", $messages)) { ?>
+            <span class="messages">Price must be an integer value.</span>
+        <?php } ?>
+    </label>
+    
+    <label for="quantity">Quantity:
+        <input type="text" id="quantity" name="quantity" value="<?php echo isset($_POST['quantity']) ? htmlspecialchars($_POST['quantity']) : ''; ?>">
+        <?php if (!empty($messages) && in_array("Price must be an quantity value.", $messages)) { ?>
+            <span class="messages">Price must be an quantity value.</span>
+        <?php } ?>
+    </label>
+    
+    <label for="description">Description:
+        <textarea id="description" name="description"><?php echo isset($_POST['description']) ? htmlspecialchars($_POST['description']) : ''; ?></textarea>
+    </label>
+    
+    <input type="submit" value="Submit" name="submit">
+    
+</form>
 </body>
 </html>

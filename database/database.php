@@ -19,8 +19,6 @@ class Database {
             $stmt->bindParam($key, $value);
         }
     }
-
-
     public function getAllProducts($table, $deleted = 0) {
         try {
 
@@ -55,7 +53,6 @@ class Database {
     
             $params = array(':id' => $id);
             $this->bindParams($stmt, $params);
-    
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch(PDOException $e) {
@@ -63,7 +60,6 @@ class Database {
             return false;
         }
     }
-
     
     public function updateProduct($table, $id, $data) {
         try {
@@ -107,13 +103,6 @@ class Database {
             echo "Error: " . $e->getMessage();
             return false;
         }
-    }
-    
-    
-    
+    }   
 }
-
-
-
 ?>
-<!-- // membuat query menjadi generel di class database -->
